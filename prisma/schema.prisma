@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Data {
+  id          String     @id @unique // sha256 hash as unique identifier
+  value       String     @unique
+  properties  Properties?
+  created_at  DateTime  
+}
+
+model Properties {
+  id                       String   @id @default(cuid())
+  data                     Data     @relation(fields: [dataId], references: [id], onDelete: Cascade)
+  dataId                   String   @unique
+  length                   Int
+  is_palindrome             Boolean
+  unique_characters         Int
+  word_count                Int
+  sha256_hash               String
+  character_frequency_map   Json
+}
